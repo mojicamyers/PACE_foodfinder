@@ -12,7 +12,7 @@
                 margin: 0;
                 height: 100%;
                 width:  100%;
-                background-color:#35456C;
+                background-color:#324525;
             }
             
             #titleDiv{
@@ -21,7 +21,9 @@
                 margin: 0;
                 height: 7%;
                 width: 100%;
-                background-color:#35456C;
+                background-color:#324525;
+                font-weight: bold;
+                font-size: 25px;
             }
             
             h1{
@@ -47,7 +49,7 @@
                 width: 98.5%; 
                 padding-left: .75%;
                 padding-right: .75%;
-                background-color: #35456C;
+                background-color: #324525;
             }
             #panelDiv{
                 float:right;
@@ -55,7 +57,7 @@
                 padding: 0;
                 height: 45%;
                 width: 100%;
-                background-color: #6E8EE0;
+                background-color: #324525;
             }
             #popupDiv{
                 float: bottom;
@@ -63,7 +65,7 @@
                 margin-right: 25%;
                 height: 30%;
                 width: 50%;
-                background-color: #35456C;
+                background-color: #324525;
             }
             
         
@@ -85,7 +87,7 @@
                 margin: 0;
                 height: 20%;
                 width: 100%;
-                background-color: #6E8EE0;
+                background-color: #324525;
                 
             }
             
@@ -103,7 +105,7 @@
                 padding:0;
                 height: 100%;
                 width: 50%;
-                background-color: #6E8EE0;
+                background-color: #324525;
                     
             }
             
@@ -113,14 +115,14 @@
                 margin: 0;
                 height: 100%;
                 width: 50%;
-                background-color: #6E8EE0;
+                background-color: #7a993d;
                 vertical-align: middle;
             }
             
             .tab{
                 overflow: hidden;
                 border: 1px solid #ccc;
-                background-color: #6E8EE0;
+                background-color: #324525;
                 
             }
             
@@ -134,19 +136,20 @@
                 transition: 0.3s;
                 font-size: 17px;
                 color: white;
+                font-weight: bold;
             }
             
             .tab button:hover {
-                background color: #35456C;
+                background color: #7a993d;
             }
             
             .tab button.active {
-                background-color: #35456C;
+                background-color: #7a993d;
             }
             
             .tabcontent{
                 padding: 6px 12px;
-                border: 1px solid #6E8EE0;
+                border: 1px solid #324525;
                 border-top: none;
                 color: white;
             }
@@ -159,7 +162,7 @@
                 left: 0;
                 width: 100%;
                 height: 60vh;
-                background-color: #6E8EE0;
+                background-color: #7a993d;
                 z-index: 200;
                 color: white;
                 text-align: center;
@@ -174,7 +177,7 @@
                 left: 0;
                 width: 100%;
                 height: 20vh;
-                background-color: #6E8EE0;
+                background-color: #7a993d;
                 z-index: -10;
                 color: white;
                 text-align: center;
@@ -208,29 +211,31 @@
             }
             
         </style>
-        <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/css/main.css">
-        <script src="https://js.arcgis.com/4.18/"></script>
+        <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+        <script src="https://js.arcgis.com/4.23/"></script>
         
         <script>
             require([
                 "esri/config",
                 "esri/core/urlUtils",
-                "esri/Map",
+                "esri/WebMap",
                 "esri/views/MapView",
+                "esri/layers/FeatureLayer",
                 "esri/layers/CSVLayer",
                 "esri/layers/GroupLayer",
                 "esri/layers/VectorTileLayer",
+                "esri/widgets/Feature",
                 "esri/widgets/Legend",
                 "esri/widgets/LayerList",
                 "esri/widgets/Search",
                 "esri/widgets/Locate",
-                
-                "dojo/domReady!",
+                "dojo/domReady!"
             ], function(
-                    esriConfig, urlUtils, Map, MapView, CSVLayer, GroupLayer, VectorTileLayer, Legend, LayerList, Search, Locate){
+                    esriConfig, urlUtils, WebMap, MapView, FeatureLayer, CSVLayer, GroupLayer, VectorTileLayer, Feature, Legend, LayerList, Search, Locate){
                 
+
                 
-                var myMap = new Map({
+                var myMap = new WebMap({
                     
                 });
                 
@@ -266,10 +271,11 @@
                 var bigBox = new CSVLayer({
                     url:"https://www.dl.dropboxusercontent.com/s/eskn8a4se7q7mz0/SNAP_BigBox.csv?dl=0",                 
                     title: "Big Box Store",
+                    
                     popupTemplate: {
                             title: "{storeName}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -280,7 +286,7 @@
                     symbol:{
                         type: "simple-marker",
                         style: "square",
-                        color: "#a6cee3",
+                        color: "#e41a1c",
                         size: 8,
                         outline:{
                             width: 1,
@@ -292,9 +298,7 @@
                     
                 };
                 
-                myMap.add(bigBox);
-                
-                
+                myMap.add(bigBox);                
                 
                 ////////// Convenience Stores
                 
@@ -303,7 +307,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                         }
                 });
                 
@@ -311,9 +315,9 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#33a02c",
+                        color: "#ff7f00",
                         style: "diamond",
-                        size: 9,
+                        size: 10,
                         outline:{
                             width: 1,
                             color: "#ffffff"
@@ -333,7 +337,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                 });
@@ -342,9 +346,9 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#fb9a99",
+                        color: "#000000",
                         style: "diamond",
-                        size: 9,
+                        size: 10,
                         outline:{
                             width: 1,
                             color: "#ffffff"
@@ -363,7 +367,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                 });
@@ -373,8 +377,8 @@
                     symbol:{
                         type: "simple-marker",
                         style:"diamond",
-                        color: "#b2df8a",
-                        size: 9,
+                        color: "#984ea3",
+                        size: 10,
                         outline:{
                             width: 1,
                             color: "#ffffff"
@@ -393,7 +397,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                 });
@@ -404,7 +408,7 @@
                     symbol:{
                         type: "simple-marker",
                         style: "square",
-                        color: "#1f78b4",
+                        color: "#377eb8",
                         size: 8,
                         outline:{
                             width: 1,
@@ -424,7 +428,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -434,7 +438,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#e31a1c",
+                        color: "#e41a1c",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -455,7 +459,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -465,7 +469,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#fdbf6f",
+                        color: "#377eb8",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -486,7 +490,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -496,7 +500,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#ff7f00",
+                        color: "#984ea3",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -517,7 +521,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -527,7 +531,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#cab2d6",
+                        color: "#ff7f00",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -548,7 +552,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -558,7 +562,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#6a3d9a",
+                        color: "#000000",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -580,7 +584,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -590,7 +594,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#ffff99",
+                        color: "#a65628",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -611,7 +615,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -621,7 +625,7 @@
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
                         type: "simple-marker",
-                        color: "#b15928",
+                        color: "#f781bf",
                         style: "circle",
                         size: 8,
                         outline:{
@@ -647,7 +651,7 @@
                     popupTemplate: {
                             title: "{EntityName}",
                             content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "popupDiv"
+                            container: "tab3"
                             
                         }
                     
@@ -750,9 +754,12 @@
                 myView.ui.add(locateBtn, {
                     position: "top-left"
                 });
-                
+
+                 
+               
             });
-                
+
+             
             
             
         </script>
@@ -784,8 +791,8 @@
                     <div id="legendDiv"><div class="tab">
                         <button class="tablinks" onclick="openTab(event,'tab1')">Instructions</button> 
                         <button class="tablinks" onclick="openTab(event,'tab2')">Facility Key</button> 
+                        <button class="tablinks" onclick="openTab(event,'tab3')">Location Information</button>
                          </div>
-                    
                     <div id="tab1" class="tabcontent">
                         <ul>
                             <li>Click on the tabs to change between the instructions and map key.</li>
@@ -795,18 +802,20 @@
                         </ul>
                     </div>   
                     <div id="tab2" class="tabcontent" style="display:none">
-                           
+                    </div>    
+                    <div id="tab3" class="esri-widget">
                     </div> 
                         
                 </div>
         </div>
         
         <script>
+            
             const splash = document.querySelector('.splash');
             document.addEventListener('DOMContentLoaded',(e)=>{
                 setTimeout(()=>{
                     splash.classList.add('display-none');
-                }, 8000);
+                }, 000);
                 
             })
             
@@ -826,8 +835,8 @@
                 document.getElementById(tabName).style.display = "block";
                 evt.currentTarget.className += " active";
             }
-            
-            
+
+
         </script>
         
     
