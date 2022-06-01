@@ -23,7 +23,7 @@
                 width: 100%;
                 background-color:#324525;
                 font-weight: bold;
-                font-size: 21px;
+                font-size: 25px;
             }
             
             h1{
@@ -245,16 +245,11 @@
                     center: [-82.05587, 39.46],
                     zoom:7,
                     popup: {
-                        
-                        dockEnabled: true,
-                        dockOptions: {
-                            position: "bottom-left",
-                            breakpoint: false,
-                        
+                        autoOpenEnabled: false                       
                         },
-                    }
+                    });
                     
-                });
+               
                 
                 var myBaseMap = new VectorTileLayer({
                     url: "https://www.arcgis.com/sharing/rest/content/items/3be4423f14414fa486b1f7bf59ab5fad/resources/styles/root.json",
@@ -303,7 +298,8 @@
                 ////////// Convenience Stores
                 
                 var convenienceStore = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/lxqxmf7dwyevyix/SNAP_ConvenienceStore.csv?dl=0",       title: "Convenience Store", 
+                    url:"https://www.dl.dropboxusercontent.com/s/lxqxmf7dwyevyix/SNAP_ConvenienceStore.csv?dl=0",       
+                    title: "Convenience Store", 
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
@@ -393,7 +389,8 @@
                 ////////// Small Box Stores
                 
                 var smallBox = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/hh945smt115ustb/SNAP_SmallBox.csv?dl=0",               title: "Small Box Store",    
+                    url:"https://www.dl.dropboxusercontent.com/s/hh945smt115ustb/SNAP_SmallBox.csv?dl=0",
+                    title: "Small Box Store",    
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
@@ -694,7 +691,7 @@
                         }
                     }
                 });
-                
+                /*
                 const layerList2 = new LayerList({
                     view: myView,
                     container: "legendDiv2",
@@ -710,7 +707,7 @@
                         }
                     }
                 });
-                
+                */
                 var myGroupLayer1 = new GroupLayer({
                     
                     title: "Department Stores",
@@ -755,7 +752,41 @@
                     position: "top-left"
                 });
 
-                 
+//Adds location information to the More Info tab
+
+                myView.when().then(() => {
+	                const graphic = {
+		                popupTemplate: {
+			                content: "Click a feature to show details..."
+		                }
+	                };
+
+	                const feature = new Feature({
+	                	container: "tab3",
+	                	graphic: graphic,
+	                	map: myView.myMap,
+	                	spatialReference: myView.spatialReference
+	                });
+
+	                myView.whenLayerView(bigBox).then((layerView) => {
+	                	let highlight;
+	                	myView.on("click", (event) => {
+	                		myView.hitTest(event).then((event) => {
+		                		const results = event.results.filter((result) => {
+		                			return result.graphic.layer.popupTemplate;
+			                   	});
+			                	const result = results[0];
+			                	highlight && highlight.remove();
+				                if (result) {
+				                	feature.graphic = result.graphic;
+				                	highlight = layerView.highlight(result.graphic);
+			                	} else {
+			                		feature.graphic = graphic;
+			                	}
+			                });
+	                	});
+                	});
+                });               
                
             });
 
@@ -803,7 +834,7 @@
                     </div>   
                     <div id="tab2" class="tabcontent" style="display:none">
                     </div>    
-                    <div id="tab3" class="esri-widget">
+                    <div id="tab3" class="tabcontent" style="display:none">
                     </div> 
                         
                 </div>
@@ -815,7 +846,7 @@
             document.addEventListener('DOMContentLoaded',(e)=>{
                 setTimeout(()=>{
                     splash.classList.add('display-none');
-                }, 000);
+                }, 8000);
                 
             })
             
