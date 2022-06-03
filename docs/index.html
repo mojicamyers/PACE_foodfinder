@@ -224,6 +224,7 @@
                 "esri/layers/CSVLayer",
                 "esri/layers/GroupLayer",
                 "esri/layers/VectorTileLayer",
+                "esri/widgets/Directions",
                 "esri/widgets/BasemapToggle",
                 "esri/widgets/Feature",
                 "esri/widgets/Legend",
@@ -232,10 +233,11 @@
                 "esri/widgets/Locate",
                 "dojo/domReady!"
             ], function(
-                    esriConfig, urlUtils, WebMap, MapView, FeatureLayer, CSVLayer, GroupLayer, VectorTileLayer, BasemapToggle, Feature, Legend, LayerList, Search, Locate){
+                    esriConfig, urlUtils, WebMap, MapView, FeatureLayer, CSVLayer, GroupLayer, VectorTileLayer, Directions, BasemapToggle, Feature, Legend, LayerList, Search, Locate){
                 
                 esriConfig.apiKey = "AAPK5cacc7f459dd4595b7de450a43923bfdwuJ4NpkgZCfrxqfwTO6W64wJINqAmV8tw6W-Ei4rvypbWIwW8smW4mNloFA_zRpw";
                 
+
                 var myMap = new WebMap({
                     basemap: "arcgis-navigation"
                 });
@@ -264,20 +266,22 @@
               
                 ////////// Big Box Stores
               
-                
                 var bigBox = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/eskn8a4se7q7mz0/SNAP_BigBox.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/3xachz74cnguxlq/SNAP_BigBox.csv?dl=0",                 
                     title: "Big Box Store",
                     
                     popupTemplate: {
                             title: "{storeName}",
-                            content: "<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}",
+                            content: "<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
                             container: "InfoTab"
                             
-                        }
+                    }
                     
                 });
                 
+
+
+
                 bigBox.renderer = {
                     type:"simple", //which outcast new SimpleRenderer
                     symbol:{
@@ -296,11 +300,11 @@
                 };
                 
                 myMap.add(bigBox);                
-                
+
                 ////////// Convenience Stores
                 
                 var convenienceStore = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/lxqxmf7dwyevyix/SNAP_ConvenienceStore.csv?dl=0",       
+                    url:"https://www.dl.dropboxusercontent.com/s/vfzape2wwgwnn9x/SNAP_ConvenienceStore.csv?dl=0",       
                     title: "Convenience Store", 
                     popupTemplate: {
                             title: "{Store_Name}",
@@ -330,7 +334,7 @@
                 ////////// Farmer's Markets and Specialty Stores
                 
                 var farmerMarketSpecialty = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/iipsivx6iqnlqxj/SNAP_FarmersMarket_Specialty.csv?dl=0",   
+                    url:"https://www.dl.dropboxusercontent.com/s/l65g15nbhmfwbt2/SNAP_FarmersMarket_Specialty.csv?dl=0",   
                     title: "Farmer's Market or Specialty Store",
                     popupTemplate: {
                             title: "{Store_Name}",
@@ -361,7 +365,8 @@
                 ////////// Grocery Stores
                 
                 var groceryStore = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/husg8ay1f1ha0au/SNAP_GroceryStore.csv?dl=0",           title: "Grocery Store",     
+                    url:"https://www.dl.dropboxusercontent.com/s/fir9p4wvzeqocdn/SNAP_GroceryStore.csv?dl=0",           
+                    title: "Grocery Store",     
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
@@ -391,7 +396,7 @@
                 ////////// Small Box Stores
                 
                 var smallBox = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/hh945smt115ustb/SNAP_SmallBox.csv?dl=0",
+                    url:"https://www.dl.dropboxusercontent.com/s/xa071pyu5fhypa4/SNAP_SmallBox.csv?dl=0",
                     title: "Small Box Store",    
                     popupTemplate: {
                             title: "{Store_Name}",
@@ -422,7 +427,7 @@
                //////////////////Agencies
                 
                 var fa_CivicSenior = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/p9kwxa116ndud4c/FA_CivicSenior.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/f0ohzgikgn5ojzz/FA_CivicSenior.csv?dl=0",                 
                     title: "Civic and Senior Centers",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -453,7 +458,7 @@
                 
                 
                 var fa_LibrarySchool = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/60kf7ntmu9hw8wt/FA_LibrarySchool.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/yyvlr4rj5e29758/FA_LibrarySchool.csv?dl=0",                 
                     title: "Libraries and Schools",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -484,7 +489,7 @@
                 
                 
                 var fa_Other = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/ynklphcadgjkfye/FA_Other.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/ndr8h6gbbsc5c6j/FA_Other.csv?dl=0",                 
                     title: "Other",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -515,7 +520,7 @@
                 
                 
                 var fa_Pantry = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/elcr61my3znz26y/FA_Pantry.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/xpt1x5pb80deupz/FA_Pantry.csv?dl=0",                 
                     title: "Food Pantries",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -546,7 +551,7 @@
                 
                 
                 var fa_Park = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/95yidseuh28wtj6/FA_Park.csv?dl=0",                 
+                    url:"https://www.dl.dropboxusercontent.com/s/rpespnatf25oxn6/FA_Park.csv?dl=0",                 
                     title: "Parks",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -578,7 +583,7 @@
                 
                 
                 var fa_Religious = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/jmkckev17dk7amt/FA_Religious.csv?dl=0",    
+                    url:"https://www.dl.dropboxusercontent.com/s/ncag0tjab9w5eor/FA_Religious.csv?dl=0",    
                     title: "Religious",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -609,7 +614,7 @@
                 
                 
                 var fa_Residential = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/q3a5pr8umtfudzv/FA_Residential.csv?dl=0",            
+                    url:"https://www.dl.dropboxusercontent.com/s/58vq6njmfksckvz/FA_Residential.csv?dl=0",            
                     title: "Residential",
                     popupTemplate: {
                             title: "{EntityName}",
@@ -706,6 +711,8 @@
                     position: "top-left"
                 });
 
+
+                
 //Adds location information to the More Info tab
 
                 myView.when().then(() => {
@@ -722,27 +729,32 @@
 	                	spatialReference: myView.spatialReference
 	                });
 
+
+
 	                myView.whenLayerView(bigBox).then((layerView) => {
-	                	let highlight;
+	                	let highlight, graphicInfo;
 	                	myView.on("click", (event) => {
 	                		myView.hitTest(event).then((event) => {
 		                		const results = event.results.filter((result) => {
 		                			return result.graphic.layer.popupTemplate;
 			                   	});
+                            const graphicInfo = event.results[0].graphic;
+                            const attributes = graphicInfo.attributes;
+                            mapUrl = attributes.MapsLink;
+                            console.log(mapUrl)
+
 			                	const result = results[0];
 			                	highlight && highlight.remove();
 				                if (result) {
 				                	feature.graphic = result.graphic;
 				                	highlight = layerView.highlight(result.graphic);
-                                    
 			                	} else {
 			                		feature.graphic = graphic;
 			                	}
 			                });
 	                	});
                 	});
-                });               
-               
+                });                              
             });
             
    
@@ -777,9 +789,9 @@
                         <button class="tablinks" onclick="openTab(event,'InfoTab')">More Info</button>                 
                         <button class="tablinks" onclick="openTab(event,'LegendTab')">Facility Key</button> 
                         <button class="tablinks" onclick="openTab(event,'InstructionTab')">Instructions</button> 
-                        
                          </div>
                     <div id="InfoTab" class="tabcontent">
+                        <a href="https://maps.google.com/" onclick="location.href=this.href+'?daddr='+mapUrl;return false;"><h3>Directions</h3></a>
                     </div>                       
                     <div id="LegendTab" class="tabcontent" style="display:none">
                     </div>  
@@ -802,10 +814,11 @@
             document.addEventListener('DOMContentLoaded',(e)=>{
                 setTimeout(()=>{
                     splash.classList.add('display-none');
-                }, 000);
+                }, 8000);
                 
             })
             
+
             function openTab(evt, tabName){
                 var i, tabcontent, tablinks;
                 tabcontent=
