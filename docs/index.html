@@ -205,7 +205,7 @@
                     font-size: 14px;
                 }
                 
-                #tab1{
+                #InstructionTab{
                     font-size: 11px;
                 }
             }
@@ -224,6 +224,7 @@
                 "esri/layers/CSVLayer",
                 "esri/layers/GroupLayer",
                 "esri/layers/VectorTileLayer",
+                "esri/widgets/BasemapToggle",
                 "esri/widgets/Feature",
                 "esri/widgets/Legend",
                 "esri/widgets/LayerList",
@@ -231,13 +232,16 @@
                 "esri/widgets/Locate",
                 "dojo/domReady!"
             ], function(
-                    esriConfig, urlUtils, WebMap, MapView, FeatureLayer, CSVLayer, GroupLayer, VectorTileLayer, Feature, Legend, LayerList, Search, Locate){
+                    esriConfig, urlUtils, WebMap, MapView, FeatureLayer, CSVLayer, GroupLayer, VectorTileLayer, BasemapToggle, Feature, Legend, LayerList, Search, Locate){
                 
-
+                esriConfig.apiKey = "AAPK5cacc7f459dd4595b7de450a43923bfdwuJ4NpkgZCfrxqfwTO6W64wJINqAmV8tw6W-Ei4rvypbWIwW8smW4mNloFA_zRpw";
                 
                 var myMap = new WebMap({
-                    
+                    basemap: "arcgis-navigation"
                 });
+
+
+                
                 
                 var myView = new MapView({
                     map: myMap,
@@ -247,19 +251,17 @@
                     popup: {
                         autoOpenEnabled: false                       
                         },
-                    });
+                });
                     
-               
-                
+
                 var myBaseMap = new VectorTileLayer({
                     url: "https://www.arcgis.com/sharing/rest/content/items/3be4423f14414fa486b1f7bf59ab5fad/resources/styles/root.json",
                     title: "Basemap",
                     listMode:"hide"
                 });
+                //myMap.add(myBaseMap);
                 
-                myMap.add(myBaseMap);
-                
-                
+              
                 ////////// Big Box Stores
               
                 
@@ -269,8 +271,8 @@
                     
                     popupTemplate: {
                             title: "{storeName}",
-                            content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "tab3"
+                            content: "<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}",
+                            container: "InfoTab"
                             
                         }
                     
@@ -303,7 +305,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "tab3"
+                            container: "InfoTab"
                         }
                 });
                 
@@ -333,7 +335,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "tab3"
+                            container: "InfoTab"
                             
                         }
                 });
@@ -363,7 +365,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "tab3"
+                            container: "InfoTab"
                             
                         }
                 });
@@ -394,7 +396,7 @@
                     popupTemplate: {
                             title: "{Store_Name}",
                             content:"<p>This is a SNAP benefit accepting {Store_Type} retailer located at {Address} in {City}, {State}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
-                            container: "tab3"
+                            container: "InfoTab"
                             
                         }
                 });
@@ -424,8 +426,8 @@
                     title: "Civic and Senior Centers",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -455,8 +457,8 @@
                     title: "Libraries and Schools",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -486,8 +488,8 @@
                     title: "Other",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -517,8 +519,8 @@
                     title: "Food Pantries",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -548,8 +550,8 @@
                     title: "Parks",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -580,8 +582,8 @@
                     title: "Religious",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -611,8 +613,8 @@
                     title: "Residential",
                     popupTemplate: {
                             title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
+                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p><b>Contact:</b><br>Phone: {Phone}<br>Email: {Email}<br><br><b>Hours:</b><br> {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday}" ,
+                            container: "InfoTab"
                             
                         }
                     
@@ -636,49 +638,21 @@
                 
                 myMap.add(fa_Residential);
                 
-                
-               
-                
-                
-               
-                
-                 /*var agencies = new CSVLayer({
-                    url:"https://www.dl.dropboxusercontent.com/s/fa6n4usmotfbh1n/Food_Assistance_Programs_Info.csv?dl=0",                 
-                    title: "Food Assistance Agencies",
-                    popupTemplate: {
-                            title: "{EntityName}",
-                            content:"<p>This is a food assistance agency located at {SiteAddress1} in {SiteCity}, {SiteState}.</p> Hours: {HourOpen} - {HourClose}<br><br> Sunday: {Sunday} <br> Monday: {Monday} <br> Tuesday: {Tuesday} <br> Wednesday: {Wednesday} <br> Thursday: {Thursday} <br> Friday: {Friday} <br> Saturday: {Saturday} <br><br> Contact: {Phone}" ,
-                            container: "tab3"
-                            
-                        }
-                    
+
+                const basemapToggle = new BasemapToggle({
+                     view: myView,
+                     nextBasemap: "arcgis-imagery"
                 });
-                
-                agencies.renderer = {
-                    type:"simple", //which outcast new SimpleRenderer
-                    symbol:{
-                        type: "simple-marker",
-                        color: "#9C4BD6",
-                        style: "circle",
-                        size: 10,
-                        outline:{
-                            width: 1,
-                            color: "black"
-                        }
-                    
-                    }
-                    
-                };
-                
-                myMap.add(agencies); */
-                
+
+                myView.ui.add(basemapToggle, "bottom-right")
+
                 ///////////////////LayerList
                 
                 
                 
                 const layerList1 = new LayerList({
                     view: myView,
-                    container: "tab2",
+                    container: "LegendTab",
                     
                     listItemCreatedFunction: function(event){
                         const item = event.item;
@@ -691,40 +665,20 @@
                         }
                     }
                 });
-                /*
-                const layerList2 = new LayerList({
-                    view: myView,
-                    container: "legendDiv2",
-                    
-                    listItemCreatedFunction: function(event){
-                        const item = event.item;
-                        if(item.layer.type != "group"){
-                            
-                            item.panel = {
-                                content: "legend",
-                                open: true
-                            };
-                        }
-                    }
-                });
-                */
+
                 var myGroupLayer1 = new GroupLayer({
                     
                     title: "Department Stores",
                     layers: [smallBox, bigBox]
                 });
-                
-                
-                
+                    
                 
                 var myGroupLayer2 = new GroupLayer({
                     
                     title: "Other Stores",
                     layers: [farmerMarketSpecialty,convenienceStore,groceryStore]
                 });
-                
-                
-                
+
                 
                 var myGroupLayer3 = new GroupLayer({
                     
@@ -757,12 +711,12 @@
                 myView.when().then(() => {
 	                const graphic = {
 		                popupTemplate: {
-			                content: "Click a feature to show details..."
+			                content: "<b>Click a feature to show details...</b><br><br> - Click on the tabs to change between the instructions and map key.<br> - To zoom to your location: Press the circular icon under the zoom controls(+/-) and click \"Allow\" if prompted.<br> - In the key, click the arrow to expand the category to see its respective facility types.<br> - In the key, click the eye symbol to turn that facility on and off."
 		                }
 	                };
 
 	                const feature = new Feature({
-	                	container: "tab3",
+	                	container: "InfoTab",
 	                	graphic: graphic,
 	                	map: myView.myMap,
 	                	spatialReference: myView.spatialReference
@@ -780,6 +734,7 @@
 				                if (result) {
 				                	feature.graphic = result.graphic;
 				                	highlight = layerView.highlight(result.graphic);
+                                    
 			                	} else {
 			                		feature.graphic = graphic;
 			                	}
@@ -789,17 +744,18 @@
                 });               
                
             });
-
-             
             
-            
+   
         </script>
     </head>
 
     <body>
+        <div id="titleDiv">
+                <h1>SEO Food Finder</h1>
+        </div>
         <div class = "splash">
             <div class = "fadeIn">
-                <p>Welcome to the SEO Food Finder</p>
+                <p><h1>Welcome to the SEO Food Finder</h1></p>
                 <p>To get started:</p>
                 <ul>
                     <li>Click on the tabs to change between the instructions and map key.</li>
@@ -810,9 +766,7 @@
                 <p>Click the "Instructions" tab to refer back to these instructions.</p>
             </div>
         </div>
-        <div id="titleDiv">
-                <h1>SEO Food Finder</h1>
-            </div>
+        
         
         
         <div id="viewDiv">
@@ -820,22 +774,24 @@
                 <div id="panelDiv">
                     <div id="searchDiv"></div>
                     <div id="legendDiv"><div class="tab">
-                        <button class="tablinks" onclick="openTab(event,'tab1')">Instructions</button> 
-                        <button class="tablinks" onclick="openTab(event,'tab2')">Facility Key</button> 
-                        <button class="tablinks" onclick="openTab(event,'tab3')">More Info</button>
+                        <button class="tablinks" onclick="openTab(event,'InfoTab')">More Info</button>                 
+                        <button class="tablinks" onclick="openTab(event,'LegendTab')">Facility Key</button> 
+                        <button class="tablinks" onclick="openTab(event,'InstructionTab')">Instructions</button> 
+                        
                          </div>
-                    <div id="tab1" class="tabcontent">
+                    <div id="InfoTab" class="tabcontent">
+                    </div>                       
+                    <div id="LegendTab" class="tabcontent" style="display:none">
+                    </div>  
+                    <div id="InstructionTab" class="tabcontent" style="display:none">
                         <ul>
                             <li>Click on the tabs to change between the instructions and map key.</li>
                             <li>To zoom to your location: Press the circular icon under the zoom controls(+/-) and click "Allow" if prompted.</li>
                             <li>In the key, click the arrow to expand the category to see its respective facility types. </li>
                             <li>In the key, click the eye symbol to turn that facility on and off.</li>
                         </ul>
-                    </div>   
-                    <div id="tab2" class="tabcontent" style="display:none">
-                    </div>    
-                    <div id="tab3" class="tabcontent" style="display:none">
                     </div> 
+                    
                         
                 </div>
         </div>
@@ -846,7 +802,7 @@
             document.addEventListener('DOMContentLoaded',(e)=>{
                 setTimeout(()=>{
                     splash.classList.add('display-none');
-                }, 8000);
+                }, 000);
                 
             })
             
@@ -866,8 +822,8 @@
                 document.getElementById(tabName).style.display = "block";
                 evt.currentTarget.className += " active";
             }
-
-
+           
+            
         </script>
         
     
